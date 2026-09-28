@@ -1,0 +1,23 @@
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Python virtualenvs (smoke-test tooling)
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+
+# Go
+bin/
+*.exe
+*.test
+*.out
+coverage.*
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store

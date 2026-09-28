@@ -1,0 +1,105 @@
+{
+  "info": {
+    "name": "Disaster Response Coordination Platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "disasterId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Disasters",
+      "item": [
+        {
+          "name": "Create Disaster (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-User-Role", "value": "admin" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Flooding in Manhattan\",\n  \"description\": \"Severe street flooding reported across Manhattan, NYC.\",\n  \"tags\": [\"flood\", \"urgent\"],\n  \"created_by\": \"admin\"\n}"
+            },
+            "url": "{{baseUrl}}/disasters"
+          }
+        },
+        {
+          "name": "List Disasters (Tag Filter)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "X-User-Role", "value": "contributor" }],
+            "url": "{{baseUrl}}/disasters?tag=flood"
+          }
+        },
+        {
+          "name": "Get Disaster by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "X-User-Role", "value": "contributor" }],
+            "url": "{{baseUrl}}/disasters/{{disasterId}}"
+          }
+        },
+        {
+          "name": "Update Disaster",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "X-User-Role", "value": "contributor" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"in_progress\"\n}"
+            },
+            "url": "{{baseUrl}}/disasters/{{disasterId}}"
+          }
+        },
+        {
+          "name": "Delete Disaster (Unauthorized check - Contributor)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "X-User-Role", "value": "contributor" }],
+            "url": "{{baseUrl}}/disasters/{{disasterId}}"
+          }
+        },
+        {
+          "name": "Delete Disaster (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "X-User-Role", "value": "admin" }],
+            "url": "{{baseUrl}}/disasters/{{disasterId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Nearby Resources",
+      "item": [
+        {
+          "name": "Get Nearby Resources (PostGIS Radius Search)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "X-User-Role", "value": "contributor" }],
+            "url": "{{baseUrl}}/disasters/{{disasterId}}/resources?radius=15"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Community Reports",
+      "item": [
+        {
+          "name": "Get Reports (Redis Cache-Aside)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "X-User-Role", "value": "contributor" }],
+            "url": "{{baseUrl}}/disasters/{{disasterId}}/reports"
+          }
+        }
+      ]
+    }
+  ]
+}
